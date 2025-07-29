@@ -1,30 +1,99 @@
 #include "TVShow.h"
+#include "TVShowList.h"
 
 int main() {
 
-    TVShow t1("The Good Place", "Comedy", 22.1, 53, "TV-14", {});
-    t1.addStreamingService("Netflix");
-    t1.addStreamingService("Amazon Video");
-    t1.addStreamingService("Apple TV");
+    TVShowList list;
+    string name, genre, audienceRating;
+    double episodeLength;
+    int numEpisodes;
+    int numServs;
+    string service;
+    vector<string> servs;
 
-    cout << t1 << "\n";
+    int pick;
 
-    cout << "Is " << t1.getName() << " available on Netflix? " << (t1.isAvailable("Netflix") ? "yes!" : "no") << "\n";
-    cout << "Is " << t1.getName() << " available on Peacock? " << (t1.isAvailable("Peacock") ? "yes!" : "no") << "\n\n";
+    	do {
+		cout << "************************************************************************\n";
+		cout << "**                                                                    **\n";
+		cout << "**                          WELCOME TO THE                            **\n";
+		cout << "**                         TV SHOW INVENTORY                          **\n";
+		cout << "**                                                                    **\n";
+		cout << "************************************************************************\n";
+		cout << "** What would you like to do?                                         **\n";
+		cout << "** 1)  Add a new TV Show                                              **\n";
+		cout << "** 2)  Edit a TV Show                                                 **\n";
+		cout << "** 3)  Remove a TV Show                                               **\n";
+		cout << "** 4)  Display all TV Shows                                           **\n";
+        cout << "** 5)  Exit                                                           **\n";
+		cout << "************************************************************************\n";
+		cout << ">> ";
+		cin >> pick;
+    
+		cin.ignore(); // To ignore the \n after choice (preventing brand from being "\n")
+        string hold;
 
+    switch (pick){
+		case 1:
+		{
+			cout << "Enter Name: ";
+			getline(cin, name);
+			cout << "Enter Genre: ";
+			getline(cin, genre);
+			cout << "Enter Episode Length: ";
+			cin >> episodeLength;
+			cout << "Enter Number of Episodes: ";
+			cin >> numEpisodes;
+			cout << "Enter Audience Rating: ";
+			cin >> audienceRating;
+			cout << "Enter the number of streaming services you would like to add: ";
+            cin >> numServs;
+            cin.ignore();
 
-    TVShow t2("Breaking Bad", "Drama", 47.0, 62, "TV-14", {});
-    t2.addStreamingService("Netflix");
-    t2.addStreamingService("Apple TV");
+            servs.clear();
 
+            for(int i = 0; i < numServs; i++){
+                cout << "Enter a streaming service: ";
+                getline(cin, service);
+                servs.push_back(service);
+            }
 
-    cout << t2 << "\n";
+			TVShow show(name, genre, episodeLength, numEpisodes, audienceRating, servs);
+			list.addShow(show);
 
-    cout << "Is " << t2.getName() << " available on Netflix? " << (t1.isAvailable("Netflix") ? "yes!" : "no") << "\n";
-    cout << "Is " << t2.getName() << " available on Paramount+? " << (t1.isAvailable("Paramount+") ? "yes!" : "no") << "\n\n";
+			cout << "\n";
+			break;
+		}
+		case 2:{
+            cout << list << "\n";
+            int index;
+            cout << "Which TV Show would you like to edit? (enter number above the show): ";
+            cin >> index;
+            list.editShow(index);
+            break;
+        }
+		case 3:{
+			cout << list << "\n";
+            int index;
+            cout << "Which TV Show would you like to remove? (enter number above the show): ";
+            cin >> index;
+            list.deleteShow(index);
+			break;
+        }
+		case 4:
+			cout << list << endl;
+            break;
+        
+        case 5:
+            cout << "Goodbye!\n";
+            break;
 
+        default:
+            cout << "Invalid option. Please try again.\n";
+            break;
+        }
 
-    cout << "Are the summaries for The Good Place and Breaking Bad the same? " << ((t1 == t2) ? "yes" : "no") << "\n";
+	} while (pick != 5);
 
     return 0;
 }
