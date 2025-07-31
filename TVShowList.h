@@ -7,11 +7,13 @@
 
 class TVShowList {
 private:
-    vector<TVShow> shows;
+    vector<TVShow*> shows;
 public:
-    void addShow(TVShow t);
+    void addShow(TVShow* t);
     void editShow(int i);
     void deleteShow(int i);
+    virtual ~TVShowList();
+
 
     friend bool operator==(const TVShowList& l1, const TVShowList& l2);
     friend ostream& operator<<(ostream& os, const TVShowList& t);

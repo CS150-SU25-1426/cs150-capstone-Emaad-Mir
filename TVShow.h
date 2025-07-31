@@ -8,13 +8,22 @@
 using namespace std;
 
 class TVShow {
-private:
+protected:
+
     string name;
     string genre;
     double episodeLength;
     int numEpisodes;
     string audienceRating;
     vector<string> streams;
+
+    TVShow(const TVShow& copy): 
+        name(copy.name), 
+        genre(copy.genre), 
+        episodeLength(copy.episodeLength), 
+        numEpisodes(copy.numEpisodes), 
+        audienceRating(copy.audienceRating), 
+        streams(copy.streams){}
 
 public:
     TVShow(string name, string g, double eL, int nE, string aR, vector<string> s): 
@@ -24,16 +33,7 @@ public:
         numEpisodes(nE), 
         audienceRating(aR), 
         streams(s){}
-    TVShow(const TVShow& copy): 
-        name(copy.name), 
-        genre(copy.genre), 
-        episodeLength(copy.episodeLength), 
-        numEpisodes(copy.numEpisodes), 
-        audienceRating(copy.audienceRating), 
-        streams(copy.streams){}
-    ~TVShow(){}
-
-    
+    virtual ~TVShow(){}
     string getName() const;
     string getGenre() const;
     double getEpisodeLength() const;
@@ -46,17 +46,14 @@ public:
     void setEpisodeLength(double eL);
     void setNumEpisodes(int nE);
     void setAudienceRating(string aR);
-
     
     void addStreamingService(string service);
     bool isAvailable(string service);
     double timeToFinish() const;
-    void displaySummary();
+    virtual string displaySummary() const;
     
     friend bool operator==(const TVShow& t1, const TVShow& t2);
     friend ostream& operator<<(ostream& os, const TVShow& t);
-
-    
 
 };
 

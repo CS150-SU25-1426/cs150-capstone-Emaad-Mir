@@ -1,5 +1,6 @@
 #include "TVShow.h"
 #include <iomanip>
+#include <sstream>
 
     string TVShow::getName() const{ return name; }
     string TVShow::getGenre() const{ return genre; }
@@ -39,24 +40,30 @@
                 && (t1.episodeLength == t2.episodeLength) && (t1.numEpisodes == t2.numEpisodes)
                 && (t1.audienceRating == t2.audienceRating) && (t1.streams == t2.streams));
     }
-    
-    ostream& operator<<(ostream& os, const TVShow& t){
-        os << "Here is the summary of the show " << t.getName() << ":" << "\n"
-           << "Genre: " << t.getGenre() << "\n" 
-           << "Average Episode Length: " << fixed << setprecision(1) << t.getEpisodeLength() << " minutes" << "\n"
-           << "Number of Episodes: " << t.getNumEpisodes() << " episodes" << "\n"
-           << "Audience Rating: " << t.getAudienceRating() << "\n"
+
+    string TVShow::displaySummary() const {
+        ostringstream oss;
+        oss << "Here is the summary of the show " << name << ":" << "\n"
+           << "Genre: " << genre << "\n" 
+           << "Average Episode Length: " << fixed << setprecision(1) << episodeLength << " minutes" << "\n"
+           << "Number of Episodes: " << numEpisodes << " episodes" << "\n"
+           << "Audience Rating: " << audienceRating << "\n"
            << "Available on: ";
         
-        const vector<string>& services = t.getServices();
+        const vector<string>& services = streams;
 
         for(int i = 0; i < services.size(); i++){
-            os << services[i] << (i < services.size()-1 ? ", ": "");
+            oss << services[i] << (i < services.size()-1 ? ", ": "");
         }
-        os << "\n";
-        os << "To finish the entire show, you would need to spend " << fixed << setprecision(2) << t.timeToFinish() << " hours binge watching it!";
+        oss << "\n";
+        oss << "To finish the entire show, you would need to spend " << fixed << setprecision(2) << timeToFinish() << " hours binge watching it!\n";
+        oss << "\n";
 
+        return oss.str();
+    }
+    
+    ostream& operator<<(ostream& os, const TVShow& t){
+        os << t.displaySummary();
         return os;
-
     }
 

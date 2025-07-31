@@ -1,5 +1,6 @@
 #include "TVShow.h"
 #include "TVShowList.h"
+#include "AnimatedShow.h"
 
 int main() {
 
@@ -13,7 +14,7 @@ int main() {
 
     int pick;
 
-    	do {
+    do {
 		cout << "************************************************************************\n";
 		cout << "**                                                                    **\n";
 		cout << "**                          WELCOME TO THE                            **\n";
@@ -34,34 +35,61 @@ int main() {
         string hold;
 
     switch (pick){
-		case 1:
-		{
-			cout << "Enter Name: ";
+		case 1: {
+			string name, genre, audienceRating, animationStudio;
+			double episodeLength;
+			int numEpisodes, numServs, numActors;
+			vector<string> servs, voiceActors;
+			char isAnimated;
+
+			cout << "Is this an animated show? (y/n): ";
+			cin >> isAnimated;
+			cin.ignore();
+
+			cout << "Enter show name: ";
 			getline(cin, name);
-			cout << "Enter Genre: ";
+			cout << "Enter genre: ";
 			getline(cin, genre);
-			cout << "Enter Episode Length: ";
+			cout << "Enter episode length (in minutes): ";
 			cin >> episodeLength;
-			cout << "Enter Number of Episodes: ";
+			cout << "Enter number of episodes: ";
 			cin >> numEpisodes;
-			cout << "Enter Audience Rating: ";
-			cin >> audienceRating;
-			cout << "Enter the number of streaming services you would like to add: ";
-            cin >> numServs;
-            cin.ignore();
+			cin.ignore(); // flush newline
+			cout << "Enter audience rating: ";
+			getline(cin, audienceRating);
 
-            servs.clear();
+			cout << "Enter number of streaming services: ";
+			cin >> numServs;
+			cin.ignore();
+			for (int i = 0; i < numServs; ++i) {
+				string service;
+				cout << "Enter streaming service " << i + 1 << ": ";
+				getline(cin, service);
+				servs.push_back(service);
+			}
 
-            for(int i = 0; i < numServs; i++){
-                cout << "Enter a streaming service: ";
-                getline(cin, service);
-                servs.push_back(service);
-            }
+			TVShow* show = nullptr;
 
-			TVShow show(name, genre, episodeLength, numEpisodes, audienceRating, servs);
+			if (tolower(isAnimated) == 'y') {
+				cout << "Enter animation studio: ";
+				getline(cin, animationStudio);
+				cout << "Enter number of voice actors: ";
+				cin >> numActors;
+				cin.ignore();
+				for (int i = 0; i < numActors; ++i) {
+					string actor;
+					cout << "Enter voice actor " << i + 1 << ": ";
+					getline(cin, actor);
+					voiceActors.push_back(actor);
+				}
+
+				show = new AnimatedShow(name, genre, episodeLength, numEpisodes,
+										audienceRating, servs, animationStudio, voiceActors);
+			} else {
+				show = new TVShow(name, genre, episodeLength, numEpisodes, audienceRating, servs);
+			}
+
 			list.addShow(show);
-
-			cout << "\n";
 			break;
 		}
 		case 2:{

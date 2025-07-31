@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-void TVShowList::addShow(TVShow t){
+void TVShowList::addShow(TVShow* t){
     shows.push_back(t);
 }
 
@@ -49,14 +49,14 @@ void TVShowList::editShow(int i){
                 string newName;
                 cout << "Enter a new name: ";
                 getline(cin, newName);
-                shows[i].setName(newName);
+                shows[i]->setName(newName);
                 break;
             }
             case 2:{
                 string newGenre;
                 cout << "Enter a new genre: ";
                 getline(cin, newGenre);
-                shows[i].setGenre(newGenre);
+                shows[i]->setGenre(newGenre);
                 break;
 
             }
@@ -64,14 +64,14 @@ void TVShowList::editShow(int i){
                 double newEpiLength;
                 cout << "Enter a new episode length: ";
                 cin >> newEpiLength;
-                shows[i].setEpisodeLength(newEpiLength);
+                shows[i]->setEpisodeLength(newEpiLength);
                 break;
             }
             case 4:{
                 double newNumEpi;
                 cout << "Enter a new number of episodes: ";
                 cin >> newNumEpi;
-                shows[i].setNumEpisodes(newNumEpi);
+                shows[i]->setNumEpisodes(newNumEpi);
                 break;
             }
             case 5:{
@@ -79,7 +79,7 @@ void TVShowList::editShow(int i){
                 cin.ignore();
                 cout << "Enter a new audience rating: ";
                 getline(cin, newAudienceRating);
-                shows[i].setAudienceRating(newAudienceRating);
+                shows[i]->setAudienceRating(newAudienceRating);
                 break;
             }
             case 6:{
@@ -87,7 +87,7 @@ void TVShowList::editShow(int i){
                 cin.ignore();
                 cout << "Enter another streaming service: ";
                 getline(cin, newService);
-                shows[i].addStreamingService(newService);
+                shows[i]->addStreamingService(newService);
                 break;
             }
         }
@@ -108,30 +108,23 @@ void TVShowList::deleteShow(int i){
 ostream& operator<<(ostream& os, const TVShowList& t){
     os << "Here is your list of TV Shows:\n\n";
     
-    for(int j = 0; j < t.shows.size(); j++){
-        os << "SHOW " << j << ": " << "\n";
-        os << "Name: " << t.shows[j].getName() << "\n"
-           << "Genre: " << t.shows[j].getGenre() << "\n" 
-           << "Average Episode Length: " << fixed << setprecision(1) << t.shows[j].getEpisodeLength() << " minutes" << "\n"
-           << "Number of Episodes: " << t.shows[j].getNumEpisodes() << " episodes" << "\n"
-           << "Audience Rating: " << t.shows[j].getAudienceRating() << "\n"
-           << "Available on: ";    
-        
-        const vector<string>& services = t.shows[j].getServices();
-            for(int k = 0; k < services.size(); k++){
-                os << services[k] << ((k < services.size()-1) ? ", " : "");
-        }
-
-        os << "\n\n";
-
+    for (int i = 0; i < t.shows.size(); i++) {
+        os << "SHOW " << i << ":\n";
+        os << t.shows[i]->displaySummary(); 
+        os << "\n";
     }
-    return os;
 
+    return os;
 }
 
 bool operator==(const TVShowList& l1, const TVShowList& l2) {
     return l1.shows == l2.shows;
 }
 
+TVShowList::~TVShowList(){
+    for (TVShow* show : shows) {
+        delete show;
+    }
+}
 
 
